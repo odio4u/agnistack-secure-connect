@@ -60,8 +60,8 @@ const HeroSection = () => {
             <div className="terminal-bg rounded-lg overflow-hidden">
               <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
                 <span className="h-3 w-3 rounded-full bg-destructive/60" />
-                <span className="h-3 w-3 rounded-full bg-yellow-500/60" />
-                <span className="h-3 w-3 rounded-full bg-green-500/60" />
+                <span className="h-3 w-3 rounded-full bg-primary/60" />
+                <span className="h-3 w-3 rounded-full bg-secondary/60" />
                 <span className="ml-3 text-xs text-muted-foreground font-mono">terminal</span>
               </div>
               <div className="p-5 text-left font-mono text-sm leading-relaxed">
