@@ -24,12 +24,12 @@ const HeroSection = () => {
             className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm text-muted-foreground mb-8"
           >
             <span className="h-2 w-2 rounded-full bg-primary animate-pulse-glow" />
-            Decentralized Connectivity Network
+            Distributed Connectivity Network
           </motion.div>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-6">
-            Decentralized Secure{" "}
+            Distributed Secure{" "}
             <span className="text-primary glow-text">Connectivity</span>{" "}
             for Private Applications
           </h1>

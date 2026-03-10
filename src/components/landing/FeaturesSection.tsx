@@ -19,7 +19,7 @@ const features = [
   },
   {
     icon: Globe,
-    title: "Decentralized Gateway Network",
+    title: "Distributed Gateway Network",
     description: "Traffic can route through multiple gateways for resilience and locality.",
   },
   {

@@ -34,7 +34,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-8 text-center text-xs text-muted-foreground">
-          AgniStack — Decentralized Secure Connectivity for Applications
+          AgniStack — Distributed Secure Connectivity for Applications
         </div>
       </div>
     </footer>
