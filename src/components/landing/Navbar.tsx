@@ -15,11 +15,13 @@ const Navbar = () => {
           <a href="#features" className="hover:text-foreground transition-colors">Features</a>
           <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
           <a href="#use-cases" className="hover:text-foreground transition-colors">Use Cases</a>
-          <a href="https://github.com" className="hover:text-foreground transition-colors flex items-center gap-1">
+          <a href="https://github.com/odio4u/agni-tunnels" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors flex items-center gap-1">
             <Github className="h-4 w-4" /> GitHub
           </a>
         </div>
-        <Button variant="hero" size="sm">Get Started</Button>
+          <a href="https://github.com/odio4u/agni-tunnels/blob/main/doc/agni-agent-quickstart.md" target="_blank" rel="noopener noreferrer">
+            <Button variant="hero" size="sm">Get Started</Button>
+          </a>
       </div>
     </nav>
   );

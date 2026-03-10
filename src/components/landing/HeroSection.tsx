@@ -66,16 +66,7 @@ const HeroSection = () => {
               </div>
               <div className="p-5 text-left font-mono text-sm leading-relaxed">
                 <div className="text-muted-foreground">
-                  <span className="text-primary">$</span> agnistack connect \
-                </div>
-                <div className="text-muted-foreground pl-4">
-                  --gateway <span className="text-foreground">gateway.agnistack.dev</span> \
-                </div>
-                <div className="text-muted-foreground pl-4">
-                  --service <span className="text-foreground">api</span> \
-                </div>
-                <div className="text-muted-foreground pl-4">
-                  --port <span className="text-foreground">5000</span>
+                  <span className="text-primary">$</span> agnistack connect
                 </div>
                 <div className="mt-3 text-primary">
                   → https://api.yourdomain.com
@@ -86,12 +77,16 @@ const HeroSection = () => {
 
           {/* Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <Button variant="hero" size="lg" className="gap-2">
-              Get Started <ArrowRight className="h-4 w-4" />
-            </Button>
-            <Button variant="hero-outline" size="lg" className="gap-2">
-              <Github className="h-4 w-4" /> View GitHub
-            </Button>
+            <a href="https://github.com/odio4u/agni-tunnels/blob/main/doc/agni-agent-quickstart.md" target="_blank" rel="noopener noreferrer">
+              <Button variant="hero" size="lg" className="gap-2">
+                Get Started <ArrowRight className="h-4 w-4" />
+              </Button>
+            </a>
+            <a href="https://github.com/odio4u/agni-tunnels" target="_blank" rel="noopener noreferrer">
+              <Button variant="hero-outline" size="lg" className="gap-2">
+                <Github className="h-4 w-4" /> View GitHub
+              </Button>
+            </a>
           </div>
         </motion.div>
       </div>
