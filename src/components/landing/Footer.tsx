@@ -1,3 +1,5 @@
+import logo from "../logo/file.svg";
+
 const footerLinks = [
   { label: "Documentation", href: "#" },
   { label: "GitHub", href: "#" },
@@ -11,8 +13,15 @@ const Footer = () => {
       <div className="container px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-md bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xs">A</span>
+            <div
+              className="h-6 w-6 rounded-md p-0.5 flex items-center justify-center overflow-hidden"
+              style={{ backgroundColor: "rgb(231, 230, 226)" }}
+            >
+              <img
+                src={logo}
+                alt="AgniStack"
+                className="w-full h-full object-contain block"
+              />
             </div>
             <span className="font-semibold tracking-tight">AgniStack</span>
           </div>
