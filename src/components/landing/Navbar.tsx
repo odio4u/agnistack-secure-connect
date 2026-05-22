@@ -1,22 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
-import logo from "@/components/logo/file.svg";
+import logo from "@/assets/agnistack-icon.png";
 
 const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
       <div className="container flex items-center justify-between h-16 px-6">
       <div className="flex items-center gap-3">
-      <div
-        className="h-8 w-8 rounded-lg p-1 flex items-center justify-center overflow-hidden"
-        style={{ backgroundColor: "rgb(231, 230, 226)" }}
-      >
-          <img
-            src={logo}
-            alt="AgniStack"
-            className="w-full h-full object-contain block"
-          />
-        </div>
+        <img
+          src={logo}
+          alt="AgniStack"
+          className="h-9 w-9 object-contain block"
+        />
+
         <span className="font-semibold text-xl text-white select-none">
           AgniStack
         </span>
