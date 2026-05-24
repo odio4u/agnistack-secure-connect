@@ -77,12 +77,12 @@ const HeroSection = () => {
 
           {/* Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <a href="https://github.com/odio4u/agni-tunnels/blob/main/doc/agni-agent-quickstart.md" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/dipghoshraj/agni-stack/blob/main/doc/agni-agent-quickstart.md" target="_blank" rel="noopener noreferrer">
               <Button variant="hero" size="lg" className="gap-2">
                 Get Started <ArrowRight className="h-4 w-4" />
               </Button>
             </a>
-            <a href="https://github.com/odio4u/agni-tunnels" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/dipghoshraj/agni-stack" target="_blank" rel="noopener noreferrer">
               <Button variant="hero-outline" size="lg" className="gap-2">
                 <Github className="h-4 w-4" /> View GitHub
               </Button>
