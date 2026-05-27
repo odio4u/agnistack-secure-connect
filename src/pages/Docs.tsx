@@ -39,46 +39,30 @@ const sidebarSections = [
     title: "Introduction",
     items: [
       { id: "what-is", label: "What is AgniStack", icon: Book },
-      { id: "architecture", label: "Architecture", icon: Layers },
-      { id: "core-concepts", label: "Core Concepts", icon: Boxes },
-      { id: "seeder-network", label: "Seeder Network", icon: Network },
+      { id: "core-architecture", label: "How it Works", icon: Layers },
+      { id: "architecture-overview", label: "Architecture Overview", icon: Network },
+      { id: "components", label: "Components", icon: Boxes },
     ],
   },
   {
     title: "Getting Started",
     items: [
-      { id: "installation", label: "Installation", icon: Rocket },
-      { id: "running-agent", label: "Running an Agent", icon: Terminal },
-      { id: "exposing-app", label: "Exposing an App", icon: Globe },
       { id: "quick-start", label: "Quick Start", icon: Zap },
+      { id: "components", label: "Seeder Discovery", icon: Database },
     ],
   },
   {
-    title: "Architecture",
-    items: [
-      { id: "agent", label: "Agent", icon: Cpu },
-      { id: "gateway", label: "Gateway", icon: GitBranch },
-      { id: "proxy", label: "Proxy", icon: Shield },
-      { id: "seeder", label: "Seeder", icon: Database },
-      { id: "routing-flow", label: "Routing Flow", icon: Network },
-    ],
-  },
-  {
-    title: "Advanced",
+    title: "Security & Status",
     items: [
       { id: "security", label: "Security Model", icon: Lock },
-      { id: "tls", label: "TLS Architecture", icon: Shield },
-      { id: "multi-region", label: "Multi Region", icon: Map },
-      { id: "performance", label: "Performance", icon: Activity },
-      { id: "observability", label: "Observability", icon: Eye },
+      { id: "capabilities", label: "Current Capabilities", icon: Activity },
+      { id: "future", label: "Future Direction", icon: Map },
     ],
   },
   {
     title: "Community",
     items: [
-      { id: "contributing", label: "Contributing", icon: Users },
-      { id: "roadmap", label: "Roadmap", icon: Map },
-      { id: "github", label: "GitHub", icon: Github },
+      { id: "github", label: "GitHub", icon: Github, href: "https://github.com/dipghoshraj/agni-stack" },
     ],
   },
 ];
@@ -222,7 +206,9 @@ agni-agent.exe connect`,
                           return (
                             <li key={item.id}>
                               <a
-                                href={`#${item.id}`}
+                                href={"href" in item ? item.href : `#${item.id}`}
+                                target={"href" in item ? "_blank" : undefined}
+                                rel={"href" in item ? "noopener noreferrer" : undefined}
                                 className={`group flex items-center justify-between rounded-md px-2 py-1.5 text-muted-foreground transition-colors hover:bg-card hover:text-foreground ${
                                   active ? "bg-card text-foreground" : ""
                                 }`}
