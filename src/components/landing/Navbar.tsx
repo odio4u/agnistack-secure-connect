@@ -21,6 +21,7 @@ const Navbar = () => {
           <a href="#features" className="hover:text-foreground transition-colors">Features</a>
           <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
           <a href="#use-cases" className="hover:text-foreground transition-colors">Use Cases</a>
+          <a href="/seeders" className="hover:text-foreground transition-colors">Seeders</a>
           <a href="https://github.com/dipghoshraj/agni-stack" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors flex items-center gap-1">
             <Github className="h-4 w-4" /> GitHub
           </a>
