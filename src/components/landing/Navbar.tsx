@@ -21,15 +21,15 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
           <a href="#features" className="hover:text-foreground transition-colors">Features</a>
           <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
-          <a href="#use-cases" className="hover:text-foreground transition-colors">Use Cases</a>
+          <Link to="/docs" className="hover:text-foreground transition-colors">Docs</Link>
           <Link to="/seeders" className="hover:text-foreground transition-colors">Seeders</Link>
           <a href="https://github.com/dipghoshraj/agni-stack" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors flex items-center gap-1">
             <Github className="h-4 w-4" /> GitHub
           </a>
         </div>
-          <a href="https://github.com/dipghoshraj/agni-stack/blob/main/doc/agni-agent-quickstart.md" target="_blank" rel="noopener noreferrer">
+          <Link to="/docs">
             <Button variant="hero" size="sm">Get Started</Button>
-          </a>
+          </Link>
       </div>
     </nav>
   );
