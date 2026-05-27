@@ -458,7 +458,7 @@ agni-agent.exe connect`,
                     <Check className="h-3.5 w-3.5 text-primary" />
                   </div>
                   <span className="text-muted-foreground">Your application is now live at:</span>
-                  <span className="font-mono text-primary">https://my-app.agnistack.in</span>
+                  <span className="font-mono text-primary">https://myapp.example.com</span>
                 </div>
 
                 <a
