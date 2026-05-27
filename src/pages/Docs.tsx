@@ -85,12 +85,12 @@ const sidebarSections = [
 
 const onThisPage = [
   { id: "what-is", label: "What is AgniStack" },
-  { id: "core-architecture", label: "Core Architecture" },
-  { id: "why", label: "Why AgniStack Exists" },
-  { id: "quick-start", label: "Quick Start" },
-  { id: "architecture-overview", label: "Architecture Overview" },
-  { id: "seeder-network", label: "Seeder Network" },
-  { id: "roadmap", label: "Roadmap" },
+  { id: "core-architecture", label: "How it Works" },
+  { id: "components", label: "Components" },
+  { id: "quick-start", label: "Getting Started" },
+  { id: "security", label: "Security" },
+  { id: "capabilities", label: "Current Capabilities" },
+  { id: "future", label: "Future Direction" },
 ];
 
 const coreComponents = [
@@ -169,19 +169,20 @@ const Docs = () => {
   }, []);
 
   const tabCommands = {
-    linux: `curl -fsSL https://agnistack.in/install.sh | sh
+    linux: `# 1) Discover available seeders
+agni-agent scan
 
-# Connect an agent and expose a local application
-agni-agent connect \\
-  --gateway gateway.agnistack.in:50051 \\
-  --id my-app \\
-  --port 3000`,
-    windows: `iwr https://agnistack.in/install.ps1 -useb | iex
+# 2) Generate credentials
+agni-agent gen-creds --dns myapp.example.com --name client
 
-agni-agent.exe connect --gateway gateway.agnistack.in:50051 --id my-app --port 3000`,
+# 3) Connect
+agni-agent connect`,
+    windows: `agni-agent.exe scan
+agni-agent.exe gen-creds --dns myapp.example.com --name client
+agni-agent.exe connect`,
     docker: `docker run --rm -it \\
   -v $(pwd)/agni-config.yaml:/etc/agni/agni-config.yaml \\
-  ghcr.io/dipghoshraj/agni-agent:latest connect`,
+  ghcr.io/dipghoshraj/agni-agent:latest scan`,
   };
 
   return (
@@ -289,11 +290,11 @@ agni-agent.exe connect --gateway gateway.agnistack.in:50051 --id my-app --port 3
                       </span>
                     </h1>
                     <p className="text-muted-foreground mb-4">
-                      Open-source distributed ingress and secure edge connectivity platform.
+                      Privacy-first fabric for exposing private servers to the internet.
                     </p>
                     <p className="text-sm text-muted-foreground mb-6">
-                      Expose applications securely. Route traffic through a distributed network. Run
-                      infrastructure without centralized dependency.
+                      Bring your own domain, certificates, and server. AgniStack routes raw TCP streams
+                      end-to-end without TLS termination or payload inspection.
                     </p>
                     <div className="flex flex-wrap gap-3">
                       <a href="#quick-start">
@@ -324,10 +325,10 @@ agni-agent.exe connect --gateway gateway.agnistack.in:50051 --id my-app --port 3
                     <div className="relative flex flex-col items-center gap-2 py-4">
                       {[
                         { label: "Client", icon: Cpu },
-                        { label: "Proxy", icon: Shield },
-                        { label: "Gateway", icon: GitBranch },
-                        { label: "Agent", icon: Boxes },
-                        { label: "Local App", icon: Terminal },
+                        { label: "agni-nova", icon: Shield },
+                        { label: "agni-router", icon: GitBranch },
+                        { label: "agni-agent", icon: Boxes },
+                        { label: "Your App", icon: Terminal },
                       ].map((node, i) => (
                         <div key={node.label} className="flex flex-col items-center w-full">
                           <motion.div
@@ -359,13 +360,12 @@ agni-agent.exe connect --gateway gateway.agnistack.in:50051 --id my-app --port 3
               <section className="rounded-2xl border border-border bg-card/40 p-8">
                 <h2 className="text-2xl font-bold mb-4">What is AgniStack?</h2>
                 <p className="text-muted-foreground mb-3">
-                  AgniStack is an open-source distributed networking layer that lets you securely
-                  expose applications running anywhere — local machines, servers, edge devices, or
-                  private infrastructure.
+                  Agnistack is a privacy-first, decentralized application deployment network designed
+                  to expose private servers to the internet through distributed routing.
                 </p>
                 <p className="text-muted-foreground mb-6">
-                  It works using outbound-only secure tunnels, distributed gateways, and intelligent
-                  routing nodes.
+                  It is built for zero-trust and anonymous access, especially in restricted,
+                  firewalled, or censored environments where inbound networking is difficult.
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                   {highlights.map((h) => (
@@ -392,7 +392,7 @@ agni-agent.exe connect --gateway gateway.agnistack.in:50051 --id my-app --port 3
               <section id="core-architecture" className="rounded-2xl border border-border bg-card/40 p-8">
                 <h2 className="text-2xl font-bold mb-2">Core Architecture</h2>
                 <p className="text-sm text-muted-foreground mb-6">
-                  AgniStack is built from four core components working together.
+                  External client traffic flows through agni-nova, agni-router, and agni-agent before reaching your application.
                 </p>
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                   {coreComponents.map((c) => (
@@ -509,11 +509,10 @@ agni-agent.exe connect --gateway gateway.agnistack.in:50051 --id my-app --port 3
               </section>
 
               {/* Seeder Network */}
-              <section id="seeder-network" className="rounded-2xl border border-border bg-card/40 p-8">
-                <h2 className="text-2xl font-bold mb-3">Seeder Network</h2>
+              <section id="components" className="rounded-2xl border border-border bg-card/40 p-8">
+                <h2 className="text-2xl font-bold mb-3">Components</h2>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Seeders are the registry layer of AgniStack — they hold metadata about agents and
-                  routers, helping nodes discover the network and maintain distributed consistency.
+                  Agnistack includes agni-nova (front door), agni-router (SNI to session mapping), agni-seeder (registry), and agni-agent (private server connector).
                 </p>
                 <CodeBlock code={`agni-agent scan`}>
                   <code>agni-agent scan</code>
@@ -555,7 +554,33 @@ agni-agent.exe connect --gateway gateway.agnistack.in:50051 --id my-app --port 3
                 </ul>
               </section>
 
-              {/* Footer CTA */}
+
+              <section id="capabilities" className="rounded-2xl border border-border bg-card/40 p-8">
+                <h2 className="text-2xl font-bold mb-3">Current Capabilities</h2>
+                <ul className="grid gap-2 text-sm text-muted-foreground list-disc pl-5">
+                  <li>Secure application exposure through outbound-only tunnels</li>
+                  <li>SNI-based distributed ingress routing</li>
+                  <li>Persistent gRPC bidirectional streams between agent and router</li>
+                  <li>Certificate fingerprint identity with no CA chain</li>
+                  <li>TLS 1.3 enforcement across all connections</li>
+                  <li>Decentralized seeder discovery and self-hostable full stack</li>
+                </ul>
+              </section>
+
+              <section id="future" className="rounded-2xl border border-border bg-card/40 p-8">
+                <h2 className="text-2xl font-bold mb-3">Future Direction</h2>
+                <p className="text-sm text-muted-foreground mb-4">
+                  AgniStack is intended as foundational infrastructure for privacy-first distributed systems.
+                </p>
+                <ul className="grid gap-2 text-sm text-muted-foreground list-disc pl-5">
+                  <li>Global routing optimization and multi-region failover</li>
+                  <li>Observability and tunnel health metrics</li>
+                  <li>Access control and policy enforcement</li>
+                  <li>Community-backed anonymous networking</li>
+                </ul>
+              </section>
+
+                            {/* Footer CTA */}
               <section className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-card/40 to-secondary/10 p-6">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                   <div className="flex items-start gap-3">
