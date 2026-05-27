@@ -490,7 +490,7 @@ agni-agent.exe connect`,
  agni-agent         ← Runs on your private server; forwards to your app
       │
       ▼
- Your Application   ← localhost:<port>`}
+ Your Application   ← PrivateIP:<port>`}
                 >
                   <code>{`External Client
       │
@@ -504,7 +504,7 @@ agni-agent.exe connect`,
  agni-agent         ← Runs on your private server; forwards to your app
       │
       ▼
- Your Application   ← localhost:<port>`}</code>
+ Your Application   ← PrivateIP:<port>`}</code>
                 </CodeBlock>
               </section>
 
