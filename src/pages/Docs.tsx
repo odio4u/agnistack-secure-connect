@@ -387,7 +387,7 @@ agni-agent version`;
               <section className="rounded-2xl border border-border bg-card/40 p-8">
                 <h2 className="text-2xl font-bold mb-4">What is AgniStack?</h2>
                 <p className="text-muted-foreground mb-3">
-                  Agnistack is a privacy-first, decentralized application deployment network designed
+                  AgniStack is a privacy-first, decentralized application deployment network designed
                   to expose private servers to the internet through distributed routing.
                 </p>
                 <p className="text-muted-foreground mb-6">
