@@ -51,6 +51,7 @@ const sidebarSections = [
       { id: "configuration", label: "Configuration", icon: Database },
       { id: "cli-reference", label: "CLI Reference", icon: Rocket },
       { id: "quick-start", label: "Quick Start", icon: Zap },
+      { id: "components", label: "Seeder Discovery", icon: Database },
     ],
   },
   {
@@ -532,12 +533,12 @@ agni-agent version`;
 
                 <div className="mt-5 grid gap-3 text-sm">
                   {[
-                    ["domain", "SNI domain the router uses to route traffic to this agent."],
-                    ["forward", "TCP port of your local application."],
-                    ["host", "Hostname or IP address agni-agent dials locally."],
-                    ["certs", "Path containing client.pem and client-key.pem."],
+                    ["Agent.domain", "SNI domain the router uses to route traffic to this agent."],
+                    ["Agent.forward", "TCP port of your local application."],
+                    ["Agent.host", "Hostname or IP address agni-agent dials locally."],
+                    ["Agent.certs", "Path containing client.pem and client-key.pem."],
                     ["Seeder.address", "Address of the seeder/discovery service."],
-                    ["Seeder.fingureprint", "SHA-256 fingerprint of the seeder TLS certificate."],
+                    ["Seeder.fingerprint", "SHA-256 fingerprint of the seeder TLS certificate."],
                   ].map(([field, desc]) => (
                     <div key={field} className="rounded-lg border border-border bg-background/40 p-4">
                       <div className="font-mono text-xs text-primary mb-1">{field}</div>
@@ -628,7 +629,7 @@ agni-agent version`;
  agni-agent         ← Runs on your private server; forwards to your app
       │
       ▼
- Your Application   ← localhost:<port>`}
+ Your Application   ← PrivateIP:<port>`}
                 >
                   <code>{`External Client
       │
@@ -642,7 +643,7 @@ agni-agent version`;
  agni-agent         ← Runs on your private server; forwards to your app
       │
       ▼
- Your Application   ← localhost:<port>`}</code>
+ Your Application   ← PrivateIP:<port>`}</code>
                 </CodeBlock>
               </section>
 
@@ -650,7 +651,7 @@ agni-agent version`;
               <section id="components" className="rounded-2xl border border-border bg-card/40 p-8">
                 <h2 className="text-2xl font-bold mb-3">Components</h2>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Agnistack includes agni-nova (front door), agni-router (SNI to session mapping), agni-seeder (registry), and agni-agent (private server connector).
+                  AgniStack includes agni-nova (front door), agni-router (SNI to session mapping), agni-seeder (registry), and agni-agent (private server connector).
                 </p>
                 <CodeBlock code={`agni-agent scan`}>
                   <code>agni-agent scan</code>
