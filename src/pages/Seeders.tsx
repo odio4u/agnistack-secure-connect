@@ -28,6 +28,32 @@ const highlights = [
   { icon: Lock, title: "Privacy First", desc: "Zero-Trust by design" },
 ];
 
+const getSeederStatusMeta = (status: string) => {
+  const normalizedStatus = status.trim().toLowerCase();
+
+  if (normalizedStatus === "online") {
+    return {
+      label: "Online",
+      badgeClass: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400",
+      dotClass: "bg-emerald-400 animate-pulse",
+    };
+  }
+
+  if (normalizedStatus === "offline") {
+    return {
+      label: "Offline",
+      badgeClass: "border-rose-500/30 bg-rose-500/10 text-rose-400",
+      dotClass: "bg-rose-400",
+    };
+  }
+
+  return {
+    label: status || "Unknown",
+    badgeClass: "border-muted-foreground/30 bg-muted/40 text-muted-foreground",
+    dotClass: "bg-muted-foreground",
+  };
+};
+
 const CopyButton = ({ value }: { value: string }) => {
   const [copied, setCopied] = useState(false);
   return (
@@ -46,34 +72,40 @@ const CopyButton = ({ value }: { value: string }) => {
   );
 };
 
-const SeederRow = ({ s }: { s: Seeder }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3 }}
-    className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 items-center px-5 py-4 rounded-lg border border-border/60 bg-card/40 hover:bg-card hover:border-primary/40 hover:shadow-[0_0_30px_-12px_hsl(var(--primary)/0.4)] transition-all"
-  >
-    <div className="md:col-span-2 flex items-center gap-2 font-mono text-sm">
-      <span>{s.ip}</span>
-      <CopyButton value={s.ip} />
-    </div>
-    <div className="md:col-span-5 flex items-center gap-2 font-mono text-xs text-muted-foreground truncate">
-      <span className="truncate">{s.fingerprint}</span>
-      <CopyButton value={s.fingerprint} />
-    </div>
-    <div className="md:col-span-2">
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs text-emerald-400">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-        {s.status === "online" ? "Online" : s.status}
-      </span>
-    </div>
-    <div className="md:col-span-2 font-mono text-sm text-muted-foreground">{s.maintainer}</div>
-    <div className="md:col-span-1 flex items-center gap-2 text-sm">
-      <span className="text-lg leading-none">{s.region.flag}</span>
-      <span className="text-muted-foreground truncate">{s.region.country}</span>
-    </div>
-  </motion.div>
-);
+const SeederRow = ({ s }: { s: Seeder }) => {
+  const statusMeta = getSeederStatusMeta(s.status);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 items-center px-5 py-4 rounded-lg border border-border/60 bg-card/40 hover:bg-card hover:border-primary/40 hover:shadow-[0_0_30px_-12px_hsl(var(--primary)/0.4)] transition-all"
+    >
+      <div className="md:col-span-2 flex items-center gap-2 font-mono text-sm">
+        <span>{s.ip}</span>
+        <CopyButton value={s.ip} />
+      </div>
+      <div className="md:col-span-5 flex items-center gap-2 font-mono text-xs text-muted-foreground truncate">
+        <span className="truncate">{s.fingerprint}</span>
+        <CopyButton value={s.fingerprint} />
+      </div>
+      <div className="md:col-span-2">
+        <span
+          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs ${statusMeta.badgeClass}`}
+        >
+          <span className={`h-1.5 w-1.5 rounded-full ${statusMeta.dotClass}`} />
+          {statusMeta.label}
+        </span>
+      </div>
+      <div className="md:col-span-2 font-mono text-sm text-muted-foreground">{s.maintainer}</div>
+      <div className="md:col-span-1 flex items-center gap-2 text-sm">
+        <span className="text-lg leading-none">{s.region.flag}</span>
+        <span className="text-muted-foreground truncate">{s.region.country}</span>
+      </div>
+    </motion.div>
+  );
+};
 
 const Seeders = () => {
   const [data, setData] = useState<SeederConfig | null>(null);

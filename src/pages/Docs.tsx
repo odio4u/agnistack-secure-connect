@@ -151,11 +151,40 @@ const CodeBlock = ({ children, code }: { children: React.ReactNode; code: string
   </div>
 );
 
+const trackedSectionIds = onThisPage.map((item) => item.id);
+
 const Docs = () => {
   const [activeTab, setActiveTab] = useState<"linux" | "windows" | "source">("linux");
+  const [activeSection, setActiveSection] = useState(trackedSectionIds[0]);
 
   useEffect(() => {
+    const hashSection = window.location.hash.replace("#", "");
+    if (trackedSectionIds.includes(hashSection)) {
+      setActiveSection(hashSection);
+      return;
+    }
+
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const updateActiveSection = () => {
+      const scrollPosition = window.scrollY + 140;
+      for (let i = trackedSectionIds.length - 1; i >= 0; i -= 1) {
+        const id = trackedSectionIds[i];
+        const section = document.getElementById(id);
+
+        if (section && section.offsetTop <= scrollPosition) {
+          setActiveSection(id);
+          break;
+        }
+      }
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+
+    return () => window.removeEventListener("scroll", updateActiveSection);
   }, []);
 
   const installCommands = {
@@ -241,17 +270,23 @@ agni-agent version`;
                         {section.title}
                       </div>
                       <ul className="space-y-0.5">
-                        {section.items.map((item, idx) => {
+                        {section.items.map((item) => {
                           const Icon = item.icon;
-                          const active = section.title === "Introduction" && idx === 0;
+                          const active = !("href" in item) && activeSection === item.id;
                           return (
                             <li key={item.id}>
                               <a
                                 href={"href" in item ? item.href : `#${item.id}`}
                                 target={"href" in item ? "_blank" : undefined}
                                 rel={"href" in item ? "noopener noreferrer" : undefined}
+                                onClick={() => {
+                                  if (!("href" in item)) {
+                                    setActiveSection(item.id);
+                                  }
+                                }}
+                                aria-current={active ? "page" : undefined}
                                 className={`group flex items-center justify-between rounded-md px-2 py-1.5 text-muted-foreground transition-colors hover:bg-card hover:text-foreground ${
-                                  active ? "bg-card text-foreground" : ""
+                                  active ? "bg-card text-foreground shadow-[inset_3px_0_0_hsl(var(--primary))]" : ""
                                 }`}
                               >
                                 <span className="flex items-center gap-2">
@@ -753,16 +788,26 @@ agni-agent version`;
                     On This Page
                   </div>
                   <ul className="space-y-1.5 text-sm border-l border-border">
-                    {onThisPage.map((item) => (
-                      <li key={item.id}>
-                        <a
-                          href={`#${item.id}`}
-                          className="-ml-px block border-l-2 border-transparent pl-3 py-0.5 text-muted-foreground hover:border-primary hover:text-foreground transition-colors"
-                        >
-                          {item.label}
-                        </a>
-                      </li>
-                    ))}
+                    {onThisPage.map((item) => {
+                      const active = activeSection === item.id;
+
+                      return (
+                        <li key={item.id}>
+                          <a
+                            href={`#${item.id}`}
+                            onClick={() => setActiveSection(item.id)}
+                            aria-current={active ? "page" : undefined}
+                            className={`-ml-px block border-l-2 pl-3 py-0.5 transition-colors ${
+                              active
+                                ? "border-primary text-foreground"
+                                : "border-transparent text-muted-foreground hover:border-primary hover:text-foreground"
+                            }`}
+                          >
+                            {item.label}
+                          </a>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 
