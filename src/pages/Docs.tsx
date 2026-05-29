@@ -47,8 +47,10 @@ const sidebarSections = [
   {
     title: "Getting Started",
     items: [
+      { id: "installation", label: "Install agni-agent", icon: Terminal },
+      { id: "configuration", label: "Configuration", icon: Database },
+      { id: "cli-reference", label: "CLI Reference", icon: Rocket },
       { id: "quick-start", label: "Quick Start", icon: Zap },
-      { id: "components", label: "Seeder Discovery", icon: Database },
     ],
   },
   {
@@ -70,8 +72,12 @@ const sidebarSections = [
 const onThisPage = [
   { id: "what-is", label: "What is AgniStack" },
   { id: "core-architecture", label: "How it Works" },
+  { id: "installation", label: "Install agni-agent" },
+  { id: "configuration", label: "Configuration" },
+  { id: "cli-reference", label: "CLI Reference" },
+  { id: "quick-start", label: "Quick Start" },
+  { id: "architecture-overview", label: "Architecture Overview" },
   { id: "components", label: "Components" },
-  { id: "quick-start", label: "Getting Started" },
   { id: "security", label: "Security" },
   { id: "capabilities", label: "Current Capabilities" },
   { id: "future", label: "Future Direction" },
@@ -146,28 +152,63 @@ const CodeBlock = ({ children, code }: { children: React.ReactNode; code: string
 );
 
 const Docs = () => {
-  const [activeTab, setActiveTab] = useState<"linux" | "windows" | "docker">("linux");
+  const [activeTab, setActiveTab] = useState<"linux" | "windows" | "source">("linux");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const tabCommands = {
-    linux: `# 1) Discover available seeders
-agni-agent scan
+  const installCommands = {
+    linux: `# Download the Linux or macOS binary from GitHub Releases
+# https://github.com/dipghoshraj/agni-stack/releases
 
-# 2) Generate credentials
-agni-agent gen-creds --dns myapp.example.com --name client
+chmod +x agni-agent
+sudo mv agni-agent /usr/local/bin/agni-agent
 
-# 3) Connect
-agni-agent connect`,
-    windows: `agni-agent.exe scan
-agni-agent.exe gen-creds --dns myapp.example.com --name client
-agni-agent.exe connect`,
-    docker: `docker run --rm -it \\
-  -v $(pwd)/agni-config.yaml:/etc/agni/agni-config.yaml \\
-  ghcr.io/dipghoshraj/agni-agent:latest scan`,
+agni-agent version`,
+    windows: `# Download agni-agent.exe from GitHub Releases
+# https://github.com/dipghoshraj/agni-stack/releases
+
+.\\agni-agent.exe version`,
+    source: `git clone https://github.com/dipghoshraj/agni-stack.git
+cd agni-stack
+
+make agent-linux      # → release/linux/agni-agent
+make agent-darwin     # → release/darwin/agni-agent
+make agent-windows    # → release/windows/agni-agent.exe
+make agent-all        # all platforms at once
+
+make help`,
   };
+
+  const configExample = `version: v1
+
+Agent:
+  name: "agent-agni"
+  domain: "agni.local.internal"   # SNI domain for routing
+  forward: 5050                   # Local port your app listens on
+  host: "localhost"               # Local host to dial
+  region: "global"
+  certs: "./"                     # Directory with client.pem + client-key.pem
+  Seeder:
+    address: "localhost:8080"
+    fingureprint: "<seeder-cert-fingerprint>"`;
+
+  const quickStartCommands = `# 1) Edit agni-config.yaml with your seeder, domain, port, and cert path
+
+# 2) Generate certificates from Agent.domain and Agent.name
+agni-agent gen-creds
+
+# Optional: use a different config file
+agni-agent gen-creds -f /path/to/agni-config.yaml
+
+# 3) Start your local app on Agent.forward, then run the agent
+agni-agent connect`;
+
+  const cliCommands = `agni-agent connect
+agni-agent gen-creds
+agni-agent gen-creds -f /path/to/agni-config.yaml
+agni-agent version`;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -283,9 +324,9 @@ agni-agent.exe connect`,
                       end-to-end without TLS termination or payload inspection.
                     </p>
                     <div className="flex flex-wrap gap-3">
-                      <a href="#quick-start">
+                      <a href="#installation">
                         <Button variant="hero">
-                          Get Started <ArrowRight className="h-4 w-4" />
+                          Install agni-agent <ArrowRight className="h-4 w-4" />
                         </Button>
                       </a>
                       <a
@@ -406,15 +447,17 @@ agni-agent.exe connect`,
                 </a>
               </section>
 
-              {/* Quick Start */}
-              <section id="quick-start" className="rounded-2xl border border-border bg-card/40 p-8">
-                <h2 className="text-2xl font-bold mb-2">Quick Start</h2>
+              {/* Installation */}
+              <section id="installation" className="rounded-2xl border border-border bg-card/40 p-8">
+                <h2 className="text-2xl font-bold mb-2">Install agni-agent</h2>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Get your first application online in under 2 minutes.
+                  agni-agent runs alongside your private application and opens a persistent gRPC
+                  tunnel to agni-router, so services that are not directly exposed to the internet
+                  can still receive external traffic.
                 </p>
 
                 <div className="mb-4 flex gap-1 border-b border-border">
-                  {(["linux", "windows", "docker"] as const).map((t) => (
+                  {(["linux", "windows", "source"] as const).map((t) => (
                     <button
                       key={t}
                       onClick={() => setActiveTab(t)}
@@ -424,7 +467,7 @@ agni-agent.exe connect`,
                           : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
-                      {t === "linux" ? "Linux / macOS" : t}
+                      {t === "linux" ? "Linux / macOS" : t === "source" ? "Build from Source" : "Windows"}
                       {activeTab === t && (
                         <motion.div
                           layoutId="tab"
@@ -435,24 +478,133 @@ agni-agent.exe connect`,
                   ))}
                 </div>
 
-                <CodeBlock code={tabCommands[activeTab]}>
-                  <code className="text-foreground/90">{tabCommands[activeTab]}</code>
+                <CodeBlock code={installCommands[activeTab]}>
+                  <code className="text-foreground/90">{installCommands[activeTab]}</code>
                 </CodeBlock>
 
-                <div className="mt-4 flex items-center gap-3 rounded-lg border border-border bg-background/40 px-4 py-3 text-sm">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/15">
-                    <Check className="h-3.5 w-3.5 text-primary" />
-                  </div>
-                  <span className="text-muted-foreground">Your application is now live at:</span>
-                  <span className="font-mono text-primary">https://myapp.example.com</span>
+                <div className="mt-5 overflow-hidden rounded-lg border border-border">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-background/60 text-xs uppercase tracking-wider text-muted-foreground">
+                      <tr>
+                        <th className="px-4 py-3 font-medium">Platform</th>
+                        <th className="px-4 py-3 font-medium">Release file</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border text-muted-foreground">
+                      <tr>
+                        <td className="px-4 py-3">Linux (amd64)</td>
+                        <td className="px-4 py-3 font-mono text-foreground/90">agni-agent</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3">macOS (amd64)</td>
+                        <td className="px-4 py-3 font-mono text-foreground/90">agni-agent</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3">Windows (amd64)</td>
+                        <td className="px-4 py-3 font-mono text-foreground/90">agni-agent.exe</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
 
                 <a
-                  href="#exposing-app"
+                  href="https://github.com/dipghoshraj/agni-stack/releases"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="mt-5 inline-flex items-center gap-1 text-sm text-primary hover:underline"
                 >
-                  Explore the full getting started guide <ArrowRight className="h-3 w-3" />
+                  Download from GitHub Releases <ArrowRight className="h-3 w-3" />
                 </a>
+              </section>
+
+              {/* Configuration */}
+              <section id="configuration" className="rounded-2xl border border-border bg-card/40 p-8">
+                <h2 className="text-2xl font-bold mb-2">Configuration</h2>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Place an agni-config.yaml file in the directory where you run the agent. The
+                  values tell agni-agent which domain to register, which local service to dial, and
+                  which seeder to trust.
+                </p>
+
+                <CodeBlock code={configExample}>
+                  <code>{configExample}</code>
+                </CodeBlock>
+
+                <div className="mt-5 grid gap-3 text-sm">
+                  {[
+                    ["domain", "SNI domain the router uses to route traffic to this agent."],
+                    ["forward", "TCP port of your local application."],
+                    ["host", "Hostname or IP address agni-agent dials locally."],
+                    ["certs", "Path containing client.pem and client-key.pem."],
+                    ["Seeder.address", "Address of the seeder/discovery service."],
+                    ["Seeder.fingureprint", "SHA-256 fingerprint of the seeder TLS certificate."],
+                  ].map(([field, desc]) => (
+                    <div key={field} className="rounded-lg border border-border bg-background/40 p-4">
+                      <div className="font-mono text-xs text-primary mb-1">{field}</div>
+                      <div className="text-muted-foreground text-xs">{desc}</div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* CLI Reference */}
+              <section id="cli-reference" className="rounded-2xl border border-border bg-card/40 p-8">
+                <h2 className="text-2xl font-bold mb-2">CLI Reference</h2>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Use these commands after installing agni-agent and creating agni-config.yaml.
+                </p>
+
+                <CodeBlock code={cliCommands}>
+                  <code>{cliCommands}</code>
+                </CodeBlock>
+
+                <div className="mt-5 grid gap-3 text-sm">
+                  {[
+                    ["connect", "Registers with the seeder and opens a persistent tunnel."],
+                    ["gen-creds", "Generates self-signed TLS certificates using Agent.domain and Agent.name from agni-config.yaml."],
+                    ["gen-creds -f", "Generates credentials with a specific config file path."],
+                    ["version", "Prints the current agni-agent version."],
+                  ].map(([command, desc]) => (
+                    <div key={command} className="flex gap-3 rounded-lg border border-border bg-background/40 p-4">
+                      <Terminal className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                      <div>
+                        <div className="font-mono text-xs text-foreground mb-1">agni-agent {command}</div>
+                        <div className="text-muted-foreground text-xs">{desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Quick Start */}
+              <section id="quick-start" className="rounded-2xl border border-border bg-card/40 p-8">
+                <h2 className="text-2xl font-bold mb-2">Quick Start</h2>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Configure agni-agent, generate credentials, start your app, and connect the tunnel.
+                </p>
+
+                <CodeBlock code={quickStartCommands}>
+                  <code className="text-foreground/90">{quickStartCommands}</code>
+                </CodeBlock>
+
+                <div className="mt-5 grid gap-3 text-sm">
+                  {[
+                    ["Edit agni-config.yaml", "Set your seeder address, domain, local forward port, and certificate directory."],
+                    ["Generate certificates", "Run agni-agent gen-creds to create client.pem and client-key.pem."],
+                    ["Start your app", "Run your private service on the host and port declared in Agent.host and Agent.forward."],
+                    ["Connect", "Run agni-agent connect to register and open the persistent tunnel."],
+                  ].map(([title, desc]) => (
+                    <div key={title} className="flex gap-3 rounded-lg border border-border bg-background/40 p-4">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/15">
+                        <Check className="h-3.5 w-3.5 text-primary" />
+                      </div>
+                      <div>
+                        <div className="font-medium mb-1">{title}</div>
+                        <div className="text-muted-foreground text-xs">{desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </section>
 
               {/* Architecture Overview */}
