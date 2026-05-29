@@ -192,7 +192,7 @@ Agent:
   certs: "./"                     # Directory with client.pem + client-key.pem
   Seeder:
     address: "localhost:8080"
-    fingureprint: "<seeder-cert-fingerprint>"`;
+    fingerprint: "<seeder-cert-fingerprint>"`;
 
   const quickStartCommands = `# 1) Edit agni-config.yaml with your seeder, domain, port, and cert path
 
