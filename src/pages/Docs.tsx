@@ -419,7 +419,7 @@ agni-agent version`;
               <section id="core-architecture" className="rounded-2xl border border-border bg-card/40 p-8">
                 <h2 className="text-2xl font-bold mb-2">Core Architecture</h2>
                 <p className="text-sm text-muted-foreground mb-6">
-                  External client traffic flows through agni-nova, agni-router, and agni-agent before reaching your application.
+                  External client traffic flows through the Proxy (agni-nova), Gateway (agni-router), and Agent (agni-agent) before reaching your application.
                 </p>
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                   {coreComponents.map((c) => (
